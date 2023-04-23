@@ -5,4 +5,5 @@ config();
 
 export default defineConfig({
   plugins: [react()],
+  base: "/sumar/"
 })
