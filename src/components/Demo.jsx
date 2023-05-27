@@ -33,7 +33,7 @@ function Demo({ darkMode }) {
     const { data } = await getSummary({ articleUrl: article.url });
 
     if (data?.summary) {
-      const newArticle = { ...article, summary: data.summary };
+      const newArticle = { ...article, summary: data.summary, translated: false };
       const updatedArticles = [newArticle, ...allArticles];
       setArticle(newArticle);
       setAllArticles(updatedArticles);
@@ -51,13 +51,13 @@ function Demo({ darkMode }) {
   }
 
   function traduText(articol) {
-    if (articol.translated == false) return;
+    if (articol.translated === true) return;
 
     let oldArticles = JSON.parse(localStorage.getItem("articles"));
     const index = oldArticles.findIndex((obj) => obj.url === articol.url);
     fetchTrans(articol.summary)
       .then((res) => {
-        setArticle((prev) => ({ ...prev, summary: res }));
+        setArticle((prev) => ({ ...prev, summary: res, translated: true }));
 
         if (index !== -1) {
           oldArticles[index] = {
@@ -82,7 +82,7 @@ function Demo({ darkMode }) {
     setAllArticles(newArticles);
     localStorage.setItem("articles", JSON.stringify(newArticles));
   }
-
+console.log(article);
   return (
     <section className="mt-16 w-full max-w-xl">
       <div className="flex flex-col w-full gap-2">
@@ -182,7 +182,7 @@ function Demo({ darkMode }) {
                 {!article.translated && (
                   <button
                     onClick={() => traduText(article)}
-                    className="bg-blue-500 text-white py-1 px-2 rounded-md flex gap-1"
+                    className="bg-blue-500 text-white py-1 px-2 rounded-md flex gap-1 active:bg-blue-600 hover:bg-blue-400"
                   >
                     Tradu
                     <div className="text-lg flex items-center justify-center pt-1">
